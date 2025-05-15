@@ -1,0 +1,35 @@
+services:
+  sshca:
+    image: example/sshca
+    build:
+      context: ..
+      dockerfile: example/Dockerfile
+    ports: 
+      - target: 2221
+        published: 2221
+        mode: host
+      - target: 2280
+        published: 2280
+        mode: host
+  ssh:
+    image: docker.io/serversideup/docker-ssh
+    ports:
+      - target: 2222
+        published: 2222
+        mode: host
+    configs:
+      - source: ssh_authorized_keys
+        target: /authorized_keys
+        mode: 0600
+  idp:
+    image: docker.io/qlik/simple-oidc-provider
+    ports:
+      - target: 9000
+        published: 9000
+        mode: host
+    environment:
+      REDIRECTS: "http://localhost:2280/sso"
+
+configs:
+  ssh_authorized_keys:
+    file: ./authorized_keys
