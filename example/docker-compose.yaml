@@ -20,10 +20,13 @@ services:
         published: 2222
         mode: host
         host_ip: 127.0.0.1
-    configs:
-      - source: ssh_authorized_keys
+    volumes:
+      - type: bind
+        source: ./authorized_keys
         target: /authorized_keys
-        mode: 0600
+      - type: volume
+        source: example_ssh_host_keys
+        target: /etc/ssh/ssh_host_keys/
   idp:
     image: docker.io/qlik/simple-oidc-provider
     ports:
@@ -34,6 +37,5 @@ services:
     environment:
       REDIRECTS: "http://localhost:2280/sso"
 
-configs:
-  ssh_authorized_keys:
-    file: ./authorized_keys
+volumes:
+  example_ssh_host_keys:
