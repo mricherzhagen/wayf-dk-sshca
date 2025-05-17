@@ -8,15 +8,18 @@ services:
       - target: 2221
         published: 2221
         mode: host
+        host_ip: 127.0.0.1
       - target: 2280
         published: 2280
         mode: host
+        host_ip: 127.0.0.1
   ssh:
     image: docker.io/serversideup/docker-ssh
     ports:
       - target: 2222
         published: 2222
         mode: host
+        host_ip: 127.0.0.1
     configs:
       - source: ssh_authorized_keys
         target: /authorized_keys
@@ -27,6 +30,7 @@ services:
       - target: 9000
         published: 9000
         mode: host
+        host_ip: 127.0.0.1
     environment:
       REDIRECTS: "http://localhost:2280/sso"
 
