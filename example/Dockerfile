@@ -24,13 +24,15 @@ FROM archlinux:latest
 # Set the working directory
 WORKDIR /app
 
-RUN pacman -Syu --noconfirm softhsm
+RUN pacman -Syu --noconfirm softhsm openssh
 
 RUN softhsm2-util --init-token --slot 0 --label "sshca_token" --pin 1234 --so-pin 123456
 
 ADD /example/ca_ed25519.key.pkcs8 ca_ed25519.key.pkcs8
 
 ADD /example/ca_ed25519.pub.ssh ca_ed25519.pub.ssh
+
+ADD /example/hostkey_ed25519* .
 
 COPY --from=build /app/pubkey_to_label .
 
@@ -39,5 +41,5 @@ RUN softhsm2-util --import ca_ed25519.key.pkcs8 --pin 1234 --token "sshca_token"
 
 COPY --from=build /app/sshca_example .
 
-# Set the entrypoint command
-ENTRYPOINT ["/app/sshca_example", "./ca_ed25519.pub.ssh"]
+
+CMD ssh-agent bash -c "ssh-add hostkey_ed25519; /app/sshca_example ./ca_ed25519.pub.ssh"

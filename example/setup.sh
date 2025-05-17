@@ -12,10 +12,11 @@ PRIVATE_PKCS8=${F}.key.pkcs8
 openssl genpkey -algorithm ed25519 -out $PRIVATE
 openssl pkey -in $PRIVATE -pubout -out $PUBLIC
 
-
 SSHPK_CONTAINER=$(podman build -q . -f Dockerfile_sshpk) 
 cat $PUBLIC | podman run -i --rm $SSHPK_CONTAINER -T pem -t ssh > $PUBLIC_SSH
 
 cat $PRIVATE | podman run -i --rm $SSHPK_CONTAINER -p -T pem -t pkcs8 > $PRIVATE_PKCS8
 
 echo "cert-authority `cat $PUBLIC_SSH`" > ./authorized_keys
+
+ssh-keygen -t ed25519 -N "" -f hostkey_ed25519

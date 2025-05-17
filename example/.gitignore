@@ -1,3 +1,4 @@
 ca_ed25519
 ca_ed25519*
 authorized_keys
+hostkey_ed25519*

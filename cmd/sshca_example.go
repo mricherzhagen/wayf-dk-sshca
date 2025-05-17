@@ -12,7 +12,7 @@ var (
 )
 
 func main() {
-	publicKey, signer := sshca.GetSignerFromSshAgent()
+	_, signer := sshca.GetSignerFromSshAgent()
 	arg := os.Args[1]
 	pubkey_ssh, err := os.ReadFile(arg)
 	if err != nil {
