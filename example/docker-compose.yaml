@@ -28,14 +28,13 @@ services:
         source: example_ssh_host_keys
         target: /etc/ssh/ssh_host_keys/
   idp:
-    image: docker.io/qlik/simple-oidc-provider
+    image: docker.io/dexidp/dex
     ports:
-      - target: 9000
-        published: 9000
+      - target: 5556
+        published: 5556
         mode: host
         host_ip: 127.0.0.1
     environment:
-      REDIRECTS: "http://localhost:2280/sso"
-
+      DEX_CONNECTORS_ENABLE_MOCK: 1
 volumes:
   example_ssh_host_keys:
